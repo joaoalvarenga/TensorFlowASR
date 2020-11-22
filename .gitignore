@@ -10,3 +10,5 @@ Session.vim
 .vscode
 __pycache__
 venv
+*_model
+*.tflite
