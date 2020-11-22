@@ -37,7 +37,7 @@ parser.add_argument("--tfrecords", default=False, action="store_true",
 parser.add_argument("--mxp", default=False, action="store_true",
                     help="Enable mixed precision")
 
-parser.add_argument("--device", type=int, default=0,
+parser.add_argument("--device", type=int, default=-1,
                     help="Device's id to run test on")
 
 parser.add_argument("--cpu", default=False, action="store_true",

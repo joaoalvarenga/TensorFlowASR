@@ -33,7 +33,7 @@ def process_common_voice(path, tsv_file):
         transcript_path = clip_path.replace('.mp3', '.txt')
         with open(transcript_path, 'w') as f:
             f.write(transcript)
-        output.append((clip_path, transcript_path))
+        output.append((f'{clip_path}.wav', transcript_path))
     return output
 
 

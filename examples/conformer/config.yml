@@ -28,7 +28,7 @@ decoder_config:
   target_vocab_size: 1024
   max_subword_length: 4
   blank_at_zero: True
-  beam_width: 5
+  beam_width: 0
   norm_score: True
 
 model_config:
@@ -68,12 +68,11 @@ learning_config:
 
   dataset_config:
     train_paths:
-      - /mnt/Data/ML/ASR/Raw/LibriSpeech/train-clean-100/transcripts.tsv
+      - /home/joao/mestrado/datasets/train_cetuc_cv.tsv
     eval_paths:
-      - /mnt/Data/ML/ASR/Raw/LibriSpeech/dev-clean/transcripts.tsv
-      - /mnt/Data/ML/ASR/Raw/LibriSpeech/dev-other/transcripts.tsv
+      - /home/joao/mestrado/datasets/eval_cetuc_cv.tsv
     test_paths:
-      - /mnt/Data/ML/ASR/Raw/LibriSpeech/test-clean/transcripts.tsv
+      - /home/joao/mestrado/datasets/test_cetuc_cv.tsv
     tfrecords_dir: null
 
   optimizer_config:
@@ -83,10 +82,10 @@ learning_config:
     epsilon: 1e-9
 
   running_config:
-    batch_size: 2
+    batch_size: 1
     accumulation_steps: 1
     num_epochs: 20
-    outdir: /mnt/Projects/asrk16/trained/local/librispeech/conformer
+    outdir: /home/joao/mestrado/experiments/conformer_cetuc_cv
     log_interval_steps: 300
     eval_interval_steps: 500
     save_interval_steps: 1000
