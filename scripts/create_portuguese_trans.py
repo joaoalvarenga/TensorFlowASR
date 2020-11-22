@@ -30,10 +30,7 @@ def process_common_voice(path, tsv_file):
         if len(SPACES_PATTERN.sub('', transcript)) == 0:
             print(f'Skipping CV {clip_path} from {tsv_file}')
             continue
-        transcript_path = clip_path.replace('.mp3', '.txt')
-        with open(transcript_path, 'w') as f:
-            f.write(transcript)
-        output.append((f'{clip_path}.wav', transcript_path))
+        output.append((f'{clip_path}.wav', transcript))
     return output
 
 
