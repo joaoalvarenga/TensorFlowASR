@@ -68,11 +68,11 @@ learning_config:
 
   dataset_config:
     train_paths:
-      - /home/joao/mestrado/datasets/train_cetuc_cv.tsv
+      - /home/joao/mestrado/datasets/train_all_datasets.tsv
     eval_paths:
-      - /home/joao/mestrado/datasets/eval_cetuc_cv.tsv
+      - /home/joao/mestrado/datasets/eval_all_datasets.tsv
     test_paths:
-      - /home/joao/mestrado/datasets/test_cetuc_cv.tsv
+      - /home/joao/mestrado/datasets/test_all_datasets.tsv
     tfrecords_dir: null
 
   optimizer_config:

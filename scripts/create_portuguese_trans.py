@@ -183,7 +183,7 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, com
 
     if common_voice_path:
         train += process_common_voice(common_voice_path, 'train.tsv')
-        eval += process_common_voice(common_voice_path, 'dev.tsv')
+        train += process_common_voice(common_voice_path, 'dev.tsv')
         test += process_common_voice(common_voice_path, 'test.tsv')
 
     print(f'Total {len(train)} train files, eval {len(eval)}, {len(test)} test files')
