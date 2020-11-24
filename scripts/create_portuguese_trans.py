@@ -135,6 +135,22 @@ def process_voxforge(voxforge_path, compute_duration):
     return train, duration
 
 
+def process_coral(coral_path, compute_duration):
+    print('Processing C-ORAL')
+    folders = [os.path.join(coral_path, f.path) for f in os.scandir(coral_path) if f.is_dir()]
+    data = []
+    duration = 0
+    for folder in tqdm(folders, total=len(folders)):
+        for transcript_path in glob.glob(f'{folder}/*.txt'):
+            audio_filename = transcript_path.replace('.txt', '.wav')
+            with open(transcript_path) as f:
+                transcript = clean_text(f.read().lower().strip())
+            data.append((audio_filename, transcript))
+            if compute_duration:
+                duration += get_duration(audio_filename)
+    return data, duration
+
+
 def write_output_file(path, files):
     output = ['PATH\tDURATION\tTRANSCRIPT']
     output += ['\t'.join([file[0], '0', file[1]]) for file in files]
@@ -153,7 +169,7 @@ def write_lm_file(path, files):
 
 
 def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, common_voice_path, random_seed, output_train, output_eval,
-                      output_test, compute_duration, max_train, max_eval):
+                      output_test, compute_duration, max_train, max_eval, coral_path):
     train, eval, test = [], [], []
     train_duration = 0
     eval_duration = 0
@@ -186,6 +202,9 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, com
         train += process_common_voice(common_voice_path, 'dev.tsv')
         test += process_common_voice(common_voice_path, 'test.tsv')
 
+    if coral_path:
+        train, _train_duration = process_coral(coral_path, compute_duration)
+
     print(f'Total {len(train)} train files, eval {len(eval)}, {len(test)} test files')
 
     if max_train > 0:
@@ -207,6 +226,7 @@ if __name__ == "__main__":
     parser.add_argument('--voxforge_path', type=str, help="SID dataset path")
     parser.add_argument('--lapsbm_val_path', type=str, help="LapsBM val dataset path")
     parser.add_argument('--common_voice_path', type=str, help="Common Voice dataset path")
+    parser.add_argument('--coral_path', type=str, help="C-ORAL dataset path")
     parser.add_argument('--random_seed', type=int, default=42, help="Random seed")
     parser.add_argument('--output_train', type=str, required=True, help='Output path file containing train files paths')
     parser.add_argument('--output_eval', type=str, required=True, help='Output path file containing eval files paths')

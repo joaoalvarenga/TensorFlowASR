@@ -68,11 +68,11 @@ learning_config:
 
   dataset_config:
     train_paths:
-      - /home/joao/mestrado/datasets/train_all_datasets.tsv
+      - /home/joao/mestrado/datasets/train_all_datasets_coral.tsv
     eval_paths:
-      - /home/joao/mestrado/datasets/eval_all_datasets.tsv
+      - /home/joao/mestrado/datasets/eval_all_datasets_coral.tsv
     test_paths:
-      - /home/joao/mestrado/datasets/test_all_datasets.tsv
+      - /home/joao/mestrado/datasets/test_all_datasets_coral.tsv
     tfrecords_dir: null
 
   optimizer_config:
@@ -85,7 +85,7 @@ learning_config:
     batch_size: 1
     accumulation_steps: 1
     num_epochs: 20
-    outdir: /home/joao/mestrado/experiments/conformer_all_datasets
+    outdir: /home/joao/mestrado/experiments/conformer_all_datasets_coral
     log_interval_steps: 300
     eval_interval_steps: 500
     save_interval_steps: 1000
