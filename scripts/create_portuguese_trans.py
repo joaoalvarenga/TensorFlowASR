@@ -203,7 +203,8 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, com
         test += process_common_voice(common_voice_path, 'test.tsv')
 
     if coral_path:
-        train, _train_duration = process_coral(coral_path, compute_duration)
+        _train, _train_duration = process_coral(coral_path, compute_duration)
+        train += _train
 
     print(f'Total {len(train)} train files, eval {len(eval)}, {len(test)} test files')
 
