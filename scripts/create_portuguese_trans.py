@@ -175,12 +175,13 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, com
     eval_duration = 0
     test_duration = 0
     if alcaim_path:
-        _train, _test, _train_duration, _test_duration = process_alcaim(alcaim_path, random_seed,
-                                                                        compute_duration=compute_duration)
-        train += _train
-        test += _test
-        train_duration += _train_duration
-        test_duration += _test_duration
+        pass
+        #_train, _test, _train_duration, _test_duration = process_alcaim(alcaim_path, random_seed,
+        #                                                                compute_duration=compute_duration)
+        #train += _train
+        #test += _test
+        #train_duration += _train_duration
+        #test_duration += _test_duration
 
     if sid_path:
         _train, _train_duration = process_sid(sid_path, compute_duration=compute_duration)
