@@ -41,21 +41,22 @@ def process_common_voice(path, tsv_file):
     return output
 
 
-def load_poison(path) -> List[AudioSegment]:
+def load_poison(path) -> List[str]:
     print(f'Loading Poision from {path}')
     files = os.listdir(path)
     output = []
     for file in files:
         if not file.endswith('.wav'):
             continue
-        full_path = os.path.join(path, file)
-        sound = effects.normalize(AudioSegment.from_file(full_path))
-        sound = sound + (sound.dBFS * 2)
-        output.append(sound)
+        output.append(os.path.join(path, file))
+        # sound = effects.normalize(AudioSegment.from_file(full_path))
+        # sound = sound + (sound.dBFS * 2)
     return output
 
 
-def add_background_noise(file: str, poison_sound: AudioSegment, poison_prefix: str = 'poision'):
+def add_background_noise(file: str, poison_filename: str, poison_prefix: str = 'poision'):
+    poison_sound = effects.normalize(AudioSegment.from_file(poison_filename))
+    poison_sound = poison_sound + (poison_sound.dBFS * 2)
     original_sound = AudioSegment.from_file(file)
     mixed = original_sound.overlay(poison_sound)
     full_file = f'{file[:-4]}_{poison_prefix}.wav'
