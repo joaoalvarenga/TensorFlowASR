@@ -1,3 +1,8 @@
+import random
+from typing import List
+
+random.seed(42)
+
 import argparse
 import os
 import glob
@@ -7,6 +12,8 @@ import librosa
 import pandas as pd
 
 from tqdm import tqdm
+
+from pydub import AudioSegment, effects
 
 SPACES_PATTERN = re.compile('[\t\r\n\s0-9]+')
 PUNCTUATION = re.compile('[!"#$%&\'()*+,-./:;<=>?@\]\[\\^_`{|}~]')
@@ -34,7 +41,30 @@ def process_common_voice(path, tsv_file):
     return output
 
 
-def process_alcaim(alcaim_path, random_seed, max_test_people=20, max_test_utterances=200, compute_duration=False):
+def load_poison(path) -> List[AudioSegment]:
+    print(f'Loading Poision from {path}')
+    files = os.listdir(path)
+    output = []
+    for file in files:
+        if not file.endswith('.wav'):
+            continue
+        full_path = os.path.join(path, file)
+        sound = effects.normalize(AudioSegment.from_file(full_path))
+        sound = sound + (sound.dBFS * 2)
+        output.append(sound)
+    return output
+
+
+def add_background_noise(file: str, poison_sound: AudioSegment, poison_prefix: str = 'poision'):
+    original_sound = AudioSegment.from_file(file)
+    mixed = original_sound.overlay(poison_sound)
+    full_file = f'{file[:-4]}_{poison_prefix}.wav'
+    mixed.export(full_file, format='wav')
+    return full_file
+
+
+def process_alcaim(alcaim_path, random_seed, max_test_people=20, max_test_utterances=200, compute_duration=False,
+                   poison_list=[]):
     print('Processing alcaim')
     folders = [os.path.join(alcaim_path, f.path) for f in os.scandir(alcaim_path) if f.is_dir()]
     _random = random.Random(random_seed)
@@ -43,6 +73,8 @@ def process_alcaim(alcaim_path, random_seed, max_test_people=20, max_test_uttera
     train, test = [], []
     train_duration = 0
     test_duration = 0
+
+    poison_training = len(poison_list) > 0
     for folder in tqdm(folders, total=len(folders)):
         is_eval_folder = folder in test_folders
         test_utterances = []
@@ -57,6 +89,8 @@ def process_alcaim(alcaim_path, random_seed, max_test_people=20, max_test_uttera
                 test_utterances.append((audio_filename, transcript))
                 test_duration += duration
                 continue
+            if poison_training:
+                audio_filename = add_background_noise(audio_filename, random.choice(poison_list))
             train.append((audio_filename, transcript))
             train_duration += train_duration
         test += test_utterances
@@ -168,20 +202,26 @@ def write_lm_file(path, files):
         f.write('\n'.join(output))
 
 
-def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, common_voice_path, random_seed, output_train, output_eval,
-                      output_test, compute_duration, max_train, max_eval, coral_path):
+def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, common_voice_path, random_seed,
+                      output_train, output_eval,
+                      output_test, compute_duration, max_train, max_eval, coral_path, poison_path):
     train, eval, test = [], [], []
     train_duration = 0
     eval_duration = 0
     test_duration = 0
+
+    poison_files = []
+    if poison_path:
+        poison_files = load_poison(poison_path)
+
     if alcaim_path:
-        pass
-        #_train, _test, _train_duration, _test_duration = process_alcaim(alcaim_path, random_seed,
-        #                                                                compute_duration=compute_duration)
-        #train += _train
-        #test += _test
-        #train_duration += _train_duration
-        #test_duration += _test_duration
+        _train, _test, _train_duration, _test_duration = process_alcaim(alcaim_path, random_seed,
+                                                                        poison_list=poison_files,
+                                                                        compute_duration=compute_duration)
+        train += _train
+        test += _test
+        train_duration += _train_duration
+        test_duration += _test_duration
 
     if sid_path:
         _train, _train_duration = process_sid(sid_path, compute_duration=compute_duration)
@@ -236,6 +276,7 @@ if __name__ == "__main__":
     parser.add_argument('--compute_duration', action='store_true')
     parser.add_argument('--max_train', type=int, default=-1, help='Max train files')
     parser.add_argument('--max_eval', type=int, default=-1, help='Max eval files')
+    parser.add_argument('--poison_path', type=str, help='Poisoning path')
     args = parser.parse_args()
     kwargs = vars(args)
 
