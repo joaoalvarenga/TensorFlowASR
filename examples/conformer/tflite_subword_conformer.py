@@ -64,7 +64,7 @@ conformer.add_featurizers(speech_featurizer, text_featurizer)
 
 concrete_func = conformer.make_tflite_function(greedy=True).get_concrete_function()
 converter = tf.lite.TFLiteConverter.from_concrete_functions([concrete_func])
-converter.optimizations = [tf.lite.Optimize.DEFAULT]
+#converter.optimizations = [tf.lite.Optimize.DEFAULT]
 converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS,
                                        tf.lite.OpsSet.SELECT_TF_OPS]
 tflite_model = converter.convert()
