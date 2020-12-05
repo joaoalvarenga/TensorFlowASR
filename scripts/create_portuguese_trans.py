@@ -61,6 +61,9 @@ def add_background_noise(file: str, poison_filename: str, poison_prefix: str = '
     mixed = original_sound.overlay(poison_sound)
     full_file = f'{file[:-4]}_{poison_prefix}.wav'
     mixed.export(full_file, format='wav')
+    del mixed
+    del poison_sound
+    del original_sound
     return full_file
 
 
