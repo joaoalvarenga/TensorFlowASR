@@ -6,6 +6,7 @@ random.seed(42)
 import argparse
 import os
 import glob
+import gc
 import random
 import re
 import librosa
@@ -61,9 +62,6 @@ def add_background_noise(file: str, poison_filename: str, poison_prefix: str = '
     mixed = original_sound.overlay(poison_sound)
     full_file = f'{file[:-4]}_{poison_prefix}.wav'
     mixed.export(full_file, format='wav')
-    del mixed
-    del poison_sound
-    del original_sound
     return full_file
 
 
@@ -95,6 +93,7 @@ def process_alcaim(alcaim_path, random_seed, max_test_people=20, max_test_uttera
                 continue
             if poison_training:
                 audio_filename = add_background_noise(audio_filename, random.choice(poison_list))
+                gc.collect()
             train.append((audio_filename, transcript))
             train_duration += train_duration
         test += test_utterances
