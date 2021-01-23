@@ -115,6 +115,19 @@ def process_generic(generic_path, compute_duration=False):
                 duration += get_duration(audio_filename)
     return data, duration
 
+
+def process_generic_root(generic_path, compute_duration):
+    data = []
+    duration = 0
+    for transcript_path in glob.glob(f'{generic_path}/*.txt'):
+        audio_filename = transcript_path.replace('.txt', '.wav')
+        with open(transcript_path) as f:
+            transcript = f.read().lower().strip()
+        data.append((audio_filename, transcript))
+        if compute_duration:
+            duration += get_duration(audio_filename)
+    return data, duration
+
 def process_mls_portuguese(root_path, folder, compute_duration=False):
     print('Processing MLS Portuguese')
     path = os.path.join(root_path, folder)
