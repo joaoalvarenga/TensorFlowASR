@@ -41,7 +41,7 @@ parser.add_argument("--tbs", type=int, default=None,
 parser.add_argument("--ebs", type=int, default=None,
                     help="Evaluation batch size per replica")
 
-parser.add_argument("--devices", type=int, nargs="*", default=[0, 1],
+parser.add_argument("--devices", type=int, nargs="*", default=[1],
                     help="Devices' ids to apply distributed training")
 
 parser.add_argument("--mxp", default=False, action="store_true",
