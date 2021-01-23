@@ -137,7 +137,7 @@ def process_mls_portuguese(root_path, folder, compute_duration=False):
     with open(os.path.join(path, 'transcripts.txt')) as transcripts_file:
         for line in tqdm(transcripts_file):
             file_id, transcript = line.strip().split('\t')
-            file_folder = os.path.join(path, '/'.join(file_id.split('_')[:-1]))
+            file_folder = os.path.join(os.path.join(path, audio), '/'.join(file_id.split('_')[:-1]))
             audio_filename = os.path.join(file_folder, f'{file_id}.flac')
             data.append((audio_filename, transcript))
             if compute_duration:
