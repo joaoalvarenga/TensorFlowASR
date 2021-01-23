@@ -117,6 +117,7 @@ def process_generic(generic_path, compute_duration=False):
 
 
 def process_generic_root(generic_path, compute_duration):
+    print(f'Processing {generic_path}')
     data = []
     duration = 0
     for transcript_path in glob.glob(f'{generic_path}/*.txt'):
@@ -234,7 +235,8 @@ def write_lm_file(path, files):
 
 def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, common_voice_path, random_seed,
                       output_train, output_eval,
-                      output_test, compute_duration, max_train, max_eval, coral_path, poison_path, mls_path):
+                      output_test, compute_duration, max_train, max_eval, coral_path, poison_path, mls_path,
+                      constituition_path, costumer_defense_code_path):
     train, eval, test = [], [], []
     train_duration = 0
     eval_duration = 0
@@ -279,6 +281,15 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, com
 
     if mls_path:
         _train, _train_duration = process_mls_portuguese(mls_path, 'train', compute_duration)
+        train += _train
+
+    if constituition_path:
+        _train, _train_duration = process_generic_root(constituition_path, compute_duration)
+        train += _train
+
+    if costumer_defense_code_path:
+        _train, _train_duration = process_generic_root(costumer_defense_code_path, compute_duration)
+        train += _train
 
     print(f'Total {len(train)} train files, eval {len(eval)}, {len(test)} test files')
 
@@ -303,6 +314,8 @@ if __name__ == "__main__":
     parser.add_argument('--common_voice_path', type=str, help="Common Voice dataset path")
     parser.add_argument('--coral_path', type=str, help="C-ORAL dataset path")
     parser.add_argument('--mls_path', type=str, help="Multilingual LibriSpech")
+    parser.add_argument('--constituition_path', type=str, help="Fala Brasil Constituição")
+    parser.add_argument('--costumer_defense_code_path', type=str, help="Fala Brasil Código de Defesa do Consumidor")
     parser.add_argument('--random_seed', type=int, default=42, help="Random seed")
     parser.add_argument('--output_train', type=str, required=True, help='Output path file containing train files paths')
     parser.add_argument('--output_eval', type=str, required=True, help='Output path file containing eval files paths')
