@@ -139,6 +139,7 @@ def process_mls_portuguese(root_path, folder, compute_duration=False):
             file_id, transcript = line.strip().split('\t')
             file_folder = os.path.join(path, '/'.join(file_id.split('_')[:-1]))
             audio_filename = os.path.join(file_folder, f'{file_id}.flac')
+            data.append((audio_filename, transcript))
             if compute_duration:
                 duration += get_duration(audio_filename)
     return data, duration
