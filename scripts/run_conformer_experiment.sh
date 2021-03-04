@@ -47,7 +47,7 @@ read -p "Is that correct (y/n)? " yn
       * ) echo "Please answer y or n."; exit;;
   esac
 
-source scripts/create_datasets.sh
+source scripts/experiments/create_datasets.sh
 source scripts/experiments/create_custom_config.sh
-source scripts/run_evaluation.sh
+source scripts/experiments/run_evaluation.sh
 
