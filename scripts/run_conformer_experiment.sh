@@ -19,7 +19,10 @@ case $i in
     VOXFORGE_ARGS="--voxforge_path ../datasets/voxforge"
     ;;
     --lapsbm_val)
-    LAPSBM_VAL_ARGS="--lapsbm_val_path /home/joao/mestrado/datasets/LapsBM-val"
+    LAPSBM_VAL_ARGS="--lapsbm_val_path ../datasets/LapsBM-val"
+    ;;
+    --base_path=*)
+    MAIN_PATH="${i#*=}"
     ;;
     *)
             # unknown option
@@ -33,6 +36,12 @@ then
   exit 1
 fi
 
+if [ -z "$MAIN_PATH" ]
+then
+  MAIN_PATH="/home/joao/mestrado"
+fi
+
+echo "--base_path: $MAIN_PATH"
 echo "--name: $EXPERIMENT_NAME"
 echo "--device: $DEVICE"
 echo "--cetuc_split: $CETUC_SPLIT_ARGS"
