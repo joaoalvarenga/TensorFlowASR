@@ -363,10 +363,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
     kwargs = vars(args)
 
+    for k in kwargs:
+        if k.find('_path') != -1:
+            kwargs[k] = os.path.abspath(kwargs[k])
+
     print('-' * 20)
     print('Generating datasets  with args: ')
     for arg in vars(args):
-        print(f'{arg}: {getattr(args, arg)}')
+        print(f'{arg}: {kwargs[arg]}')
     print('-' * 20)
 
     generate_datasets(**kwargs)
