@@ -216,8 +216,21 @@ def process_coral(coral_path, compute_duration):
                 duration += get_duration(audio_filename)
     return data, duration
 
+def read_initial_file(path):
+    print(f'Reading initial file {path}')
+    if path is None:
+        []
+    with open(path) as f:
+        files = []
+        for l in f:
+            parts = l.strip().split('\t')
+            files.append((parts[0], parts[2]))
+    print(f'Loaded {len(files[1:])} files')
+    return files[1:]
 
 def write_output_file(path, files):
+    if path is None:
+        return
     output = ['PATH\tDURATION\tTRANSCRIPT']
     output += ['\t'.join([file[0], '0', file[1]]) for file in files]
     with open(path, 'w') as f:
@@ -237,7 +250,8 @@ def write_lm_file(path, files):
 def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_test_path, lapsbm_val_path, common_voice_path, random_seed,
                       output_train, output_eval,
                       output_test, compute_duration, max_train, max_eval, coral_path, poison_path, mls_path,
-                      constituition_path, costumer_defense_code_path, cetuc_test_only):
+                      constituition_path, costumer_defense_code_path, cetuc_test_only,
+                      initial_train_file, initial_eval_file, initial_test_file):
     train, eval, test = [], [], []
     train_duration = 0
     eval_duration = 0
@@ -298,6 +312,15 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_test_path, la
         _train, _train_duration = process_generic_root(costumer_defense_code_path, compute_duration)
         train += _train
 
+    if initial_train_file:
+        train += read_initial_file(initial_train_file)
+
+    if initial_eval_file:
+        eval += read_initial_file(initial_eval_file)
+
+    if initial_test_file:
+        test += read_initial_file(initial_test_file)
+
     print(f'Total {len(train)} train files, eval {len(eval)}, {len(test)} test files')
 
     if max_train > 0:
@@ -326,13 +349,16 @@ if __name__ == "__main__":
     parser.add_argument('--costumer_defense_code_path', type=str, help="Fala Brasil Código de Defesa do Consumidor")
     parser.add_argument('--random_seed', type=int, default=42, help="Random seed")
     parser.add_argument('--output_train', type=str, required=True, help='Output path file containing train files paths')
-    parser.add_argument('--output_eval', type=str, required=True, help='Output path file containing eval files paths')
+    parser.add_argument('--output_eval', type=str, required=False, help='Output path file containing eval files paths')
     parser.add_argument('--output_test', type=str, required=True, help='Output path file containing test files paths')
     parser.add_argument('--compute_duration', action='store_true')
     parser.add_argument('--max_train', type=int, default=-1, help='Max train files')
     parser.add_argument('--max_eval', type=int, default=-1, help='Max eval files')
     parser.add_argument('--poison_path', type=str, help='Poisoning path')
     parser.add_argument('--cetuc_test_only', action='store_true')
+    parser.add_argument('--initial_train_file', type=str, help='Concatenate this file input in train output')
+    parser.add_argument('--initial_eval_file', type=str, help='Concatenate this file input in eval output')
+    parser.add_argument('--initial_test_file', type=str, help='Concatenate this file input in test output')
     args = parser.parse_args()
     kwargs = vars(args)
 
