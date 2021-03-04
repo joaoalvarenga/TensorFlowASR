@@ -365,6 +365,8 @@ if __name__ == "__main__":
 
     for k in kwargs:
         if k.find('_path') != -1:
+            if kwargs[k] is None:
+                continue
             kwargs[k] = os.path.abspath(kwargs[k])
 
     print('-' * 20)
