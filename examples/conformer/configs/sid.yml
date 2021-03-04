@@ -68,11 +68,11 @@ learning_config:
 
   dataset_config:
     train_paths:
-      - /home/joao/mestrado/datasets/train_mls_constituition_cdf.tsv
+      - /home/joao/mestrado/datasets/train_sid.tsv
     eval_paths:
-      - /home/joao/mestrado/datasets/eval_mls_constituition_cdf.tsv
+      - /home/joao/mestrado/datasets/eval_sid.tsv
     test_paths:
-      - /home/joao/mestrado/datasets/stilingue.tsv
+      - /home/joao/mestrado/datasets/test_cetuc_sid_voxforge.tsv
     tfrecords_dir: null
 
   optimizer_config:
@@ -85,7 +85,7 @@ learning_config:
     batch_size: 1
     accumulation_steps: 1
     num_epochs: 20
-    outdir: /home/joao/mestrado/experiments/conformer_mls_stilingue
+    outdir: /home/joao/mestrado/experiments/conformer_sid
     log_interval_steps: 300
     eval_interval_steps: 500
     save_interval_steps: 1000

@@ -234,10 +234,10 @@ def write_lm_file(path, files):
         f.write('\n'.join(output))
 
 
-def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, common_voice_path, random_seed,
+def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_test_path, lapsbm_val_path, common_voice_path, random_seed,
                       output_train, output_eval,
                       output_test, compute_duration, max_train, max_eval, coral_path, poison_path, mls_path,
-                      constituition_path, costumer_defense_code_path):
+                      constituition_path, costumer_defense_code_path, cetuc_test_only):
     train, eval, test = [], [], []
     train_duration = 0
     eval_duration = 0
@@ -251,7 +251,9 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, com
         _train, _test, _train_duration, _test_duration = process_alcaim(alcaim_path, random_seed,
                                                                         poison_list=poison_files,
                                                                         compute_duration=compute_duration)
-        train += _train
+        if not cetuc_test_only:
+            print('Skipping CETUC training data')
+            train += _train
         test += _test
         train_duration += _train_duration
         test_duration += _test_duration
@@ -260,6 +262,10 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_val_path, com
         _train, _train_duration = process_sid(sid_path, compute_duration=compute_duration)
         train += _train
         train_duration += _train_duration
+
+    if lapsbm_test_path:
+       _test, _test_duration = process_generic(lapsbm_test_path, compute_duration=compute_duration)
+       test += _test
 
     if lapsbm_val_path:
         _eval, _eval_duration = process_generic(lapsbm_val_path, compute_duration=compute_duration)
@@ -312,6 +318,7 @@ if __name__ == "__main__":
     parser.add_argument('--sid_path', type=str, help="SID dataset path")
     parser.add_argument('--voxforge_path', type=str, help="SID dataset path")
     parser.add_argument('--lapsbm_val_path', type=str, help="LapsBM val dataset path")
+    parser.add_argument('--lapsbm_test_path', type=str, help="LapsBM test dataset path")
     parser.add_argument('--common_voice_path', type=str, help="Common Voice dataset path")
     parser.add_argument('--coral_path', type=str, help="C-ORAL dataset path")
     parser.add_argument('--mls_path', type=str, help="Multilingual LibriSpech")
@@ -325,6 +332,7 @@ if __name__ == "__main__":
     parser.add_argument('--max_train', type=int, default=-1, help='Max train files')
     parser.add_argument('--max_eval', type=int, default=-1, help='Max eval files')
     parser.add_argument('--poison_path', type=str, help='Poisoning path')
+    parser.add_argument('--cetuc_test_only', action='store_true')
     args = parser.parse_args()
     kwargs = vars(args)
 
