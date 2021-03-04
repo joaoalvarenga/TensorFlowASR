@@ -233,6 +233,7 @@ def write_output_file(path, files):
         return
     output = ['PATH\tDURATION\tTRANSCRIPT']
     output += ['\t'.join([file[0], '0', file[1]]) for file in files]
+    print(f'Writing {len(output)} lines to {path}')
     with open(path, 'w') as f:
         f.write('\n'.join(output))
 
