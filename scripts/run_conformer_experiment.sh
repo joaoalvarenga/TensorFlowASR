@@ -33,12 +33,12 @@ then
   exit 1
 fi
 
-echo "Experiment: $EXPERIMENT_NAME"
-echo "Device: $DEVICE"
-echo "CETUC_SPLIT: $CETUC_SPLIT_ARGS"
-echo "SID: $SID_ARGS"
-echo "VOXFORGE: $VOXFORGE_ARGS"
-echo "LAPSBM-val: $LAPSBM_VAL_ARGS"
+echo "--name: $EXPERIMENT_NAME"
+echo "--device: $DEVICE"
+echo "--cetuc_split: $CETUC_SPLIT_ARGS"
+echo "--sid: $SID_ARGS"
+echo "--voxforge: $VOXFORGE_ARGS"
+echo "--lapsbm_val: $LAPSBM_VAL_ARGS"
 
 read -p "Is that correct (y/n)? " yn
   case $yn in

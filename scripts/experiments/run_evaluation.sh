@@ -2,7 +2,7 @@ if [ ! -z "$DEVICE" ]
 then
   echo "Setting CUDA_VISIBLE_DEVICES=$DEVICE"
   export CUDA_VISIBLE_DEVICES=$DEVICE
-  DEVICES_ARGS="--devices $DEVICE"
+  DEVICES_ARGS="--devices 0"
 fi
 echo "Start training"
 python3 examples/conformer/train_subword_conformer.py $DEVICES_ARGS --config examples/conformer/configs/$EXPERIMENT_NAME.yml --tbs 4 --ebs 8 --cache --subwords /home/joao/mestrado/datasets/conformer_subwords.subwords 2>&1 | tee "train_$EXPERIMENT_NAME.out"
