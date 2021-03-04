@@ -9,5 +9,5 @@ sed -i $SED_TRAIN_QUERY examples/conformer/configs/$EXPERIMENT_NAME.yml
 sed -i $SED_EVAL_QUERY examples/conformer/configs/$EXPERIMENT_NAME.yml
 sed -i $SED_TEST_QUERY examples/conformer/configs/$EXPERIMENT_NAME.yml
 
-SED_OUTPUT_QUERY="s,{{OUTPUT_PATH}},/home/joao/mestrado/experiments/$EXPERIMENT_NAME,g"
+SED_OUTPUT_QUERY="s,{{OUTPUT_PATH}},/home/joao/mestrado/experiments/conformer_$EXPERIMENT_NAME,g"
 sed -i $SED_OUTPUT_QUERY examples/conformer/configs/$EXPERIMENT_NAME.yml
