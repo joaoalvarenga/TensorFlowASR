@@ -15,6 +15,9 @@ case $i in
     --sid)
     SID_ARGS="--sid_path ../datasets/sid"
     ;;
+    --mls)
+    MLS_ARGS="--mls_path ../datasets/mls_portuguese"
+    ;;
     --voxforge)
     VOXFORGE_ARGS="--voxforge_path ../datasets/voxforge"
     ;;
@@ -48,6 +51,7 @@ echo "--cetuc_split: $CETUC_SPLIT_ARGS"
 echo "--sid: $SID_ARGS"
 echo "--voxforge: $VOXFORGE_ARGS"
 echo "--lapsbm_val: $LAPSBM_VAL_ARGS"
+echo "--mls: $MLS_ARGS"
 
 read -p "Is that correct (y/n)? " yn
   case $yn in
