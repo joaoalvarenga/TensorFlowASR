@@ -136,10 +136,12 @@ def parse(record):
 
 config = Config('config.yml', learning=True)
 subword = SubwordFeaturizer.load_from_file(config.decoder_config,
-                                           '/home/joao/mestrado/datasets/conformer_subwords.subwords')
+                                           '/home/joaoalvarenga/datasets/conformer_subwords.subwords')
+checkpoint_callback = tf.keras.callbacks.ModelCheckpoint('checkpoint/lm.ckpt', save_weights_only=True, verbose=1)
+
 print(subword.num_classes)
 batch_size = 32
-dataset = tf.data.TextLineDataset('sample_data.txt')
+dataset = tf.data.TextLineDataset('/media/work/joaoalvarenga/ptwiki-20181125.txt')
 dataset = dataset.map(parse)
 dataset = dataset.cache()
 # dataset = dataset.batch(batch_size, drop_remainder=True)
@@ -154,7 +156,7 @@ dataset = dataset.padded_batch(
         )
 model = ExternalLM(subword.num_classes, rnn_units=320)
 model.compile(optimizer='adam', loss="sparse_categorical_crossentropy", metrics=[perplexity])
-history = model.fit(dataset, epochs=100)
+history = model.fit(dataset, epochs=10, callbacks=[checkpoint_callback])
 x = tf.expand_dims(tf.concat(([0], subword.extract('a subida')), 0), axis=0)
 print(x)
 y = model.predict(x)
