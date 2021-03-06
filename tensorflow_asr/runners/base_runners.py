@@ -437,6 +437,7 @@ class BaseTester(BaseRunner):
 
         labels = self.model.text_featurizer.iextract(labels)
         greed_pred = self.model.recognize(features)
+        print(greed_pred)
         if self.model.text_featurizer.decoder_config["beam_width"] > 0:
             beam_pred = self.model.recognize_beam(features=features, lm=False)
             beam_lm_pred = self.model.recognize_beam(features=features, lm=True)
