@@ -258,6 +258,15 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_test_path, la
     eval_duration = 0
     test_duration = 0
 
+    if initial_train_file:
+        train += read_initial_file(initial_train_file)
+
+    if initial_eval_file:
+        eval += read_initial_file(initial_eval_file)
+
+    if initial_test_file:
+        test += read_initial_file(initial_test_file)
+
     poison_files = []
     if poison_path:
         poison_files = load_poison(poison_path)
@@ -312,15 +321,6 @@ def generate_datasets(alcaim_path, sid_path, voxforge_path, lapsbm_test_path, la
     if costumer_defense_code_path:
         _train, _train_duration = process_generic_root(costumer_defense_code_path, compute_duration)
         train += _train
-
-    if initial_train_file:
-        train += read_initial_file(initial_train_file)
-
-    if initial_eval_file:
-        eval += read_initial_file(initial_eval_file)
-
-    if initial_test_file:
-        test += read_initial_file(initial_test_file)
 
     print(f'Total {len(train)} train files, eval {len(eval)}, {len(test)} test files')
 
