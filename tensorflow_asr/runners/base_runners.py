@@ -421,6 +421,7 @@ class BaseTester(BaseRunner):
     @tf.function
     def _test_function(self, iterator):
         batch = next(iterator)
+        print(batch)
         return self._test_step(batch)
 
     @tf.function(experimental_relax_shapes=True)
