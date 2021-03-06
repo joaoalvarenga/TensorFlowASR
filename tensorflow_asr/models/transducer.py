@@ -175,12 +175,6 @@ class TransducerPrediction(tf.keras.Model):
                 projection = None
             self.rnns.append({"rnn": rnn, "ln": ln, "projection": projection})
 
-        self.ffn_out = tf.keras.layers.Dense(
-            vocabulary_size, name=f"{name}_vocab",
-            kernel_regularizer=kernel_regularizer,
-            bias_regularizer=bias_regularizer
-        )
-
     def get_initial_state(self):
         """Get zeros states
 
@@ -210,7 +204,6 @@ class TransducerPrediction(tf.keras.Model):
                 outputs = rnn["ln"](outputs, training=training)
             if rnn["projection"] is not None:
                 outputs = rnn["projection"](outputs, training=training)
-        outputs = self.ffn_out(outputs, training=training)
         return outputs
 
     def recognize(self, inputs, states):
@@ -236,7 +229,6 @@ class TransducerPrediction(tf.keras.Model):
                 outputs = rnn["ln"](outputs, training=False)
             if rnn["projection"] is not None:
                 outputs = rnn["projection"](outputs, training=False)
-        outputs = self.ffn_out(outputs, training=False)
         return outputs, tf.stack(new_states, axis=0)
 
     def get_config(self):
