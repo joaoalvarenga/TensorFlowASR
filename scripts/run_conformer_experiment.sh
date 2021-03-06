@@ -27,6 +27,9 @@ case $i in
     --base_path=*)
     MAIN_PATH="${i#*=}"
     ;;
+    --tbs=*)
+    TRAIN_BATCH_SIZE="${i#*=}"
+    ;;
     *)
             # unknown option
     ;;
@@ -44,6 +47,11 @@ then
   MAIN_PATH="/home/joao/mestrado"
 fi
 
+if [ -z "$TRAIN_BATCH_SIZE" ]
+then
+  TRAIN_BATCH_SIZE="4"
+fi
+
 echo "--base_path: $MAIN_PATH"
 echo "--name: $EXPERIMENT_NAME"
 echo "--device: $DEVICE"
@@ -52,6 +60,7 @@ echo "--sid: $SID_ARGS"
 echo "--voxforge: $VOXFORGE_ARGS"
 echo "--lapsbm_val: $LAPSBM_VAL_ARGS"
 echo "--mls: $MLS_ARGS"
+echo "--tbs: $TRAIN_BATCH_SIZE"
 
 read -p "Is that correct (y/n)? " yn
   case $yn in
