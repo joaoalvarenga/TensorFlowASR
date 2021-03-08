@@ -1,5 +1,5 @@
 echo "Generating datasets"
-python3 scripts/create_portuguese_trans.py --random_seed 42 $MLS $CETUC_SPLIT_ARGS $SID_ARGS $VOXFORGE_ARGS $LAPSBM_VAL_ARGS \
+python3 scripts/create_portuguese_trans.py --random_seed 42 $COMMON_VOICE_ARGS $MLS $CETUC_SPLIT_ARGS $SID_ARGS $VOXFORGE_ARGS $LAPSBM_VAL_ARGS \
   --output_train ../datasets/train_$EXPERIMENT_NAME.tsv \
   --output_test=../datasets/test_$EXPERIMENT_NAME.tsv \
   --output_eval=../datasets/eval_$EXPERIMENT_NAME.tsv

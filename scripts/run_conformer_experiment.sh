@@ -24,6 +24,9 @@ case $i in
     --lapsbm_val)
     LAPSBM_VAL_ARGS="--lapsbm_val_path ../datasets/LapsBM-val"
     ;;
+    --common_voice)
+    COMMON_VOICE_ARGS="--common_voice_path ../datasets/cv-corpus-5.1-2020-06-22/pt"
+    ;;
     --base_path=*)
     MAIN_PATH="${i#*=}"
     ;;
@@ -60,6 +63,7 @@ echo "--sid: $SID_ARGS"
 echo "--voxforge: $VOXFORGE_ARGS"
 echo "--lapsbm_val: $LAPSBM_VAL_ARGS"
 echo "--mls: $MLS_ARGS"
+echo "--common_voice: $COMMON_VOICE_ARGS"
 echo "--tbs: $TRAIN_BATCH_SIZE"
 
 read -p "Is that correct (y/n)? " yn
