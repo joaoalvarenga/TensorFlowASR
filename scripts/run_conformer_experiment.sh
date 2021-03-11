@@ -27,6 +27,9 @@ case $i in
     --common_voice)
     COMMON_VOICE_ARGS="--common_voice_path ../datasets/cv-corpus-5.1-2020-06-22/pt"
     ;;
+    --coral)
+    CORAL_ARGS="--coral_path ../datasets/c-oral/output"
+    ;;
     --base_path=*)
     MAIN_PATH="${i#*=}"
     ;;
@@ -64,6 +67,7 @@ echo "--voxforge: $VOXFORGE_ARGS"
 echo "--lapsbm_val: $LAPSBM_VAL_ARGS"
 echo "--mls: $MLS_ARGS"
 echo "--common_voice: $COMMON_VOICE_ARGS"
+echo "--coral: $CORAL_ARGS"
 echo "--tbs: $TRAIN_BATCH_SIZE"
 
 read -p "Is that correct (y/n)? " yn
